@@ -1,3 +1,4 @@
+syntax on
 set relativenumber
 set sw=4 ts=4
 noremap <C-d> <C-d>zz
