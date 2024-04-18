@@ -20,6 +20,6 @@ fi
 if [ $CONTINUE != 'y' ]; then
 	echo "Passing..."
 else
-	cp .tmux.conf ~/tmux.conf
+	cp .tmux.conf ~/.tmux.conf
 fi
 echo "Done"
