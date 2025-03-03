@@ -16,6 +16,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	alias grep='ggrep -P --color=always'
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 else
+	alias fd='fdfind'
 	alias grep='grep -P --color=always'
 fi
 
