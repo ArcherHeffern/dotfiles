@@ -1,19 +1,22 @@
 echo "Running bash_profile"
 
-alias la='ls -la'
 alias ls='ls -F'
+alias la='ls -la'
 alias haskell-language-server='haskell-language-server-9.10'
 alias batcat='bat'
-alias grep='ggrep -P --color=always'
 alias python='python3.12'
 alias pip='pip3.12'
 alias gl='git log --all --decorate --oneline --graph'
 alias indent='gindent -kr -i4'
 alias mv='mv -n'
+alias grin='grep -rin'
 
 eval "$(zoxide init bash)"
 if [[ "$(uname -s)" == "Darwin" ]]; then
+	alias grep='ggrep -P --color=always'
 	eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+	alias grep='grep -P --color=always'
 fi
 
 CARGO_ENV="$HOME/.cargo/env"
