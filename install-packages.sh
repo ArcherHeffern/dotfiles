@@ -4,7 +4,7 @@ set -euo pipefail
 
 CROSS_PLATFORM_PACKAGES=('sl' 'bat')
 MACOS_PACKAGES=('fd' 'ggrep')
-LINUX_PACKAGES=('fd-find' 'net-tools' 'zip' 'zoxide' 'default-jre')
+LINUX_PACKAGES=('fd-find' 'net-tools' 'zip' 'zoxide' 'default-jre' 'default-jdk')
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	# TODO: Check if brew is installed and install if not
