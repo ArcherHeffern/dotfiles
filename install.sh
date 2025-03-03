@@ -1,10 +1,6 @@
-# zoxide
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh > /dev/null
+#!/usr/bin/env bash
 
-# Vundle
-if [[ ! -d ~/.vim/bundle/Vundle.vim ]]; then
-	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-fi 
+set -euo pipefail
 
 # VIMRC
 if [ -e ~/.vimrc ]; then

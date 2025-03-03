@@ -1,5 +1,6 @@
 echo "Running bash_profile"
 
+set -o vi
 alias ls='ls -F'
 alias la='ls -la'
 alias haskell-language-server='haskell-language-server-9.10'
