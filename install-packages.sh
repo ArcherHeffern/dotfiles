@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CROSS_PLATFORM_PACKAGES=('sl' 'bat')
+CROSS_PLATFORM_PACKAGES=('sl' 'bat' 'tree')
 MACOS_PACKAGES=('fd' 'ggrep')
 LINUX_PACKAGES=('fd-find' 'net-tools' 'zip' 'zoxide' 'default-jre' 'default-jdk')
 
