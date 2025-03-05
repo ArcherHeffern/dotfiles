@@ -1,4 +1,4 @@
-echo "Running bash_profile"
+echo "Running .bash_profile"
 
 set -o vi
 alias ls='ls -F'
@@ -13,9 +13,28 @@ alias mv='mv -n'
 alias grin='grep -rin'
 
 eval "$(zoxide init bash)"
+
+# MACOS ONLY
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	alias grep='ggrep -P --color=always'
 	eval "$(/opt/homebrew/bin/brew shellenv)"
+	export CPPFLAGS="-I/opt/homebrew/opt/openjdk@21/include"
+	export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+	export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+	export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+	export PATH="/usr/libexec/:$PATH"
+	export PATH="$HOME/.ghcup/bin/:$PATH"
+	export PATH="$HOME/Desktop/code/brandeis_purity_test/scripts:$PATH"
+	export PATH="$HOME/.local/bin:$PATH"
+	export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+	export PATH="/opt/homebrew/opt/llvm@17/bin:$PATH"
+	# Created by `pipx` on 2024-10-05 21:10:15
+	# export PATH="$PATH:/Users/archerheffern/.local/bin"
+	export CXX="/opt/homebrew/bin/g++-14"
+	export CC="/opt/homebrew/bin/g++-14"
+	export CC="/opt/homebrew/Cellar/gcc/14.2.0_1/bin/gcc-14"
+	export CXX="/opt/homebrew/Cellar/gcc/14.2.0_1/bin/g++-14"
+# ELSE
 else
 	alias fd='fdfind'
 	alias grep='grep -P --color=always'
@@ -33,21 +52,3 @@ fi
 
 PS1='\w \$ '
 
-export CPPFLAGS="-I/opt/homebrew/opt/openjdk@21/include"
-export CXX="/opt/homebrew/bin/g++-14"
-export CC="/opt/homebrew/bin/g++-14"
-
-# Created by `pipx` on 2024-10-05 21:10:15
-# export PATH="$PATH:/Users/archerheffern/.local/bin"
-export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export PATH="/usr/libexec/:$PATH"
-export PATH="~/.ghcup/bin/:$PATH"
-export PATH="~/Desktop/code/brandeis_purity_test/scripts:$PATH"
-export PATH="~/.local/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm@17/bin:$PATH"
-
-export CC="/opt/homebrew/Cellar/gcc/14.2.0_1/bin/gcc-14"
-export CXX="/opt/homebrew/Cellar/gcc/14.2.0_1/bin/g++-14"
