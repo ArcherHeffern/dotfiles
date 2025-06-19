@@ -11,6 +11,7 @@ alias gl='git log --all --decorate --oneline --graph'
 alias indent='gindent -kr -i4'
 alias mv='mv -n'
 alias grin='grep -rin'
+alias 8='ping 8.8.8.8'
 
 eval "$(zoxide init bash)"
 
