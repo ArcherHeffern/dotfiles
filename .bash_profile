@@ -14,6 +14,7 @@ alias indent='gindent -kr -i4'
 alias mv='mv -n'
 alias grin='grep -rin'
 alias 8='ping 8.8.8.8'
+alias swagger='npx open-swagger-ui --open'
 
 eval "$(zoxide init bash)"
 
