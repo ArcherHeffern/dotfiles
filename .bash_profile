@@ -1,6 +1,8 @@
 echo "Running .bash_profile"
 
 set -o vi
+stty -ixon # To enable backwards cycling through reverse-i-search by using CTRL-S
+
 alias ls='ls -F'
 alias la='ls -la'
 alias haskell-language-server='haskell-language-server-9.10'
