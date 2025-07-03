@@ -3,6 +3,8 @@ echo "Running .bash_profile"
 set -o vi
 stty -ixon # To enable backwards cycling through reverse-i-search by using CTRL-S
 
+command -v brew &> /dev/null && { brew update && brew upgrade; }
+
 alias ls='ls -F'
 alias la='ls -la'
 alias haskell-language-server='haskell-language-server-9.10'
