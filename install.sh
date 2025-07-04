@@ -85,6 +85,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 
 fi
 
+echo ''
 echo 'Done. Next:'
 echo 'Launch vim and run :PluginInstall'
-echo 'Source the new bash_profile using `source ~/.bash_profile`'
+echo 'Source the new bash_profile using `source ~/.bash_profile` or restart your terminal.'
