@@ -17,6 +17,7 @@ alias mv='mv -n'
 alias grin='grep -rin'
 alias 8='ping 8.8.8.8'
 alias swagger='npx open-swagger-ui --open'
+alias du-pretty='du -s --si'
 
 eval "$(zoxide init bash)"
 
