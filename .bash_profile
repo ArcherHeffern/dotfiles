@@ -19,6 +19,8 @@ alias du-pretty='du -s --si'
 
 eval "$(zoxide init bash)"
 
+export PATH="$HOME/code/AScripts:$PATH"
+
 # MACOS ONLY
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	alias grep='ggrep -P --color=always'
