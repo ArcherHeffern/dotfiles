@@ -8,6 +8,11 @@
 			<string>/Users/archerheffern/Scripts/update_homebrew.sh</string>
 			<key>RunAtLoad</key>
 			<true/>
+			<key>StartCalendarInterval</key>
+			<dict>
+				<key>Day</key>
+				<integer>1</integer>
+			</dict>
 	</dict>
 </plist>
 
