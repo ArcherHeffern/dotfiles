@@ -1,120 +1,40 @@
-from typing import Callable, Iterable, TypeAlias, Optional
-from subprocess import run
 from pathlib import Path
-from platform import system
-from dataclasses import dataclass
-from enum import Enum, auto
 
-def prompt_yn(msg: str) -> bool:
-    while True:
-        r = input(msg)
-        if r in ["y", "yes"]:
-            return True
-        if r in ["n", "no"]:
-            return False
-
-def get_platform() -> "Platform":
-    match system():
-        case 'Windows':
-            return Platform.WINDOWS
-        case 'Linux':
-            return Platform.LINUX
-        case 'Darwin':
-            return Platform.MACOS
-        case _:
-            return Platform.UNKNOWN
+from install_types import Dest, GitRepo, Setting, Src
+from install_utils import has_unstaged_changes, have_same_directory_contents, have_same_file_contents, prompt_yn
+from install_config import settings
 
 
-ErrorMsg: TypeAlias = str|None
-@dataclass(frozen=True)
-class GitRepo:
-    url: str
-SrcType: TypeAlias = Path | GitRepo
-Src: TypeAlias = SrcType
-Callback: TypeAlias = Callable[["Setting"],ErrorMsg]
-Dest: TypeAlias = Path
+def can_update(src: Src, dest: Dest):
+    """
+    If dest does not exist, or if src and dest are different
+    """
+    if not dest.exists():
+        return True
 
-class Platform(Enum):
-    MACOS = auto()
-    WINDOWS = auto()
-    LINUX = auto()
-    UNKNOWN = auto()
-
-@dataclass
-class Pair:
-    src: Src
-    dest: Dest
-    make_executable: bool = False
-
-
-@dataclass
-class Setting:
-    name: str
-    src_dest_pairs: Pair | list[Pair]
-    callback: Optional[Callback] = None
-    platform: Optional[Platform | Iterable[Platform]] = None
-    final_message: str|None = None
-
-
-def get_effective_user_id() -> Optional[int]:
-    if get_platform() != Platform.MACOS:
-        return None
-
-    a = run(["id", "-u"], capture_output=True)
-    if a.returncode != 0:
-        return None
-    try:
-        return int(a.stdout.decode())
-    except:
-        return None
-
-def start_update_homebrew_cron_job(_: "Setting") -> ErrorMsg:
-    effective_user_id = get_effective_user_id()
-    if effective_user_id is None:
-        return "Failed to get effective user id"
-    run(["launchctl", "bootout", f"gui/{effective_user_id}", str(Path("~/Library/LaunchAgents/archer.homebrew.update.plist").expanduser())]) # Don't check if success
-    if run(["launchctl", "bootstrap", f"gui/{effective_user_id}", str(Path("~/Library/LaunchAgents/archer.homebrew.update.plist").expanduser())]).returncode != 0:
-        return "Failed to bootstrap."
-
-
-settings: list[Setting] = [
-    Setting("vimrc", [
-        Pair(Path(".vimrc"), Path("~/")), 
-        Pair(Path("colors"), Path("~.vim/")),
-        ],
-        final_message="Launch vim and run :PluginInstall"
-    ),
-    Setting(
-        "bash",
-        Pair(
-            Path(".bash_profile"),
-            Path("~/"),
-        ),
-        final_message="Source the new bash_profile using `source ~/.bash_profile` or restart your terminal."
-    ),
-    Setting(
-        "tmux",
-        Pair(
-            Path(".tmux.conf"),
-            Path("~/"),
-        )
-    ),
-    Setting(
-        "AScripts",
-        Pair(
-            GitRepo("https://github.com/archerheffern/AScripts"),
-            Path("~/code/"),
-        )
-    ),
-    Setting(
-        "Update Homebrew Cron Job",
-        [
-            Pair(Path("scripts/update_homebrew.sh"), Path("~/Scripts/"), True),
-            Pair(Path("scripts/archer.homebrew.update.plist"), Path("~/Library/LaunchAgents/archer.homebrew.update.plist")),
-        ],
-        start_update_homebrew_cron_job
-    ),
-]
+    if type(src) is GitRepo:
+        if has_unstaged_changes(dest):
+            return prompt_yn(f"{dest} has unstaged changes. Overwrite anyways? (y/n) ")
+        return False # TODO: May want to prompt anyways since there may be ignored files we would like to keep
+    elif type(src) is Path:
+        if src.stat().st_mode != dest.stat().st_mode:
+            return prompt_yn(f"{src} and {dest} are not the same File System Object. eg. File vs Directory. Overwrite? (y/n) ")
+        elif src.is_file():
+            if have_same_file_contents(src, dest):
+                return False
+            return prompt_yn(f"{src} and {dest} have different file contents. Overwrite {dest}? (y/n) ")
+        elif src.is_dir():
+            if have_same_directory_contents(src, dest):
+                return False
+            return prompt_yn(f"{src} and {dest} have different directory contents. Overwrite {dest}? The entire directory will be removed. (y/n) ")
+        else:
+            raise NotImplementedError("Only copying files and directories is supported.")
+    else:
+        raise NotImplementedError("Unreachable!")
 
 if __name__ == '__main__':
-    ...
+    passed: list[Setting] = []
+    skipped: list[Setting] = []
+    failed: list[Setting] = []
+    for setting in settings:
+        print(f"Running {setting.name}")
