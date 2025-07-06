@@ -2,13 +2,13 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
-from typing import Callable, Iterable, Optional, TypeAlias
+from typing import Callable, Iterable, Optional, TypeAlias, NewType
 
 
 ErrorMsg: TypeAlias = str|None
-@dataclass(frozen=True)
-class GitRepo:
-    url: str
+
+GitRepo = NewType("GitRepo", str)
+
 SrcType: TypeAlias = Path | GitRepo
 Src: TypeAlias = SrcType
 Callback: TypeAlias = Callable[["Setting"],ErrorMsg]

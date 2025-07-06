@@ -1,6 +1,8 @@
 from enum import Enum, auto
 from pathlib import Path, PosixPath
+from subprocess import run
 from stat import S_IFMT
+from shutil import copy, rmtree
 
 from install_types import Dest, GitRepo, Pair, Setting, Src
 from install_utils import get_platform, has_unstaged_changes, have_same_directory_contents, have_same_file_contents, prompt_yn
@@ -42,10 +44,25 @@ def process_pair(pair: Pair) -> Status:
     try:
         if not can_update(pair.src, pair.dest):
             return Status.SKIPPED
-        # Delete dest if it exists
-        # Copy src into dest
-        # Chmod 
-    except:
+        
+        if pair.dest.is_dir():
+            rmtree(pair.dest)
+        elif pair.dest.is_file():
+            pair.dest.unlink()
+        elif pair.dest.exists():
+            raise NotImplementedError(f"Unhandled file type at {pair.dest}")
+            
+        if type(pair.src) is GitRepo:
+            run(["git", "clone", pair.src, pair.dest])
+        elif type(pair.src) in [Path, PosixPath]:
+            copy(pair.src, pair.dest)
+        else:
+            raise NotImplementedError(f"Unreachable: {type(pair.src)}")
+            
+        if pair.make_executable and pair.dest.is_file():
+            pair.dest.chmod(755)
+    except Exception as e:
+        print(e)
         return Status.FAILED
     return Status.PASSED
     

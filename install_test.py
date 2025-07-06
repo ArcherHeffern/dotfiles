@@ -1,6 +1,9 @@
 from io import StringIO
 from pathlib import Path
+import shutil
 import unittest
+from install import process_pair, Status
+from install_types import Pair
 import install_utils
 
 class UtilTest(unittest.TestCase):
@@ -58,6 +61,27 @@ class UtilTest(unittest.TestCase):
         d1 = Path("./install_test_data/dir")
         d2 = Path("./install_test_data/dir_with_file_differences")
         self.assertFalse(install_utils.have_same_directory_contents(d1, d2))
+    
+
+    def test_process_pair(self):
+        # TODO: Find unittest fixtures
+        # Setup
+        test_dir = Path("./testing")
+        if test_dir.exists():
+            shutil.rmtree(test_dir)
+        test_dir.mkdir()
+
+        src = Path("./install_test_data/sample.conf")
+        dest = test_dir / "sample.conf"
+
+        pair = Pair(src, dest)
+        self.assertEqual(process_pair(pair), Status.PASSED)
+        self.assertTrue(install_utils.have_same_file_contents(src, dest))
+
+        # Clean up
+        if test_dir.exists():
+            shutil.rmtree(test_dir)
+
 
 if __name__ == '__main__':
     unittest.main()
