@@ -2,6 +2,7 @@ from io import TextIOBase
 from pathlib import Path
 from platform import system
 from subprocess import run
+from sys import stderr
 from typing import Optional
 from install_types import Platform
 
@@ -37,7 +38,7 @@ def get_effective_user_id() -> Optional[int]:
         return None
 
 def has_unstaged_changes(repo: Path) -> bool:
-    raise NotImplementedError()
+    raise NotImplementedError("Not implemented")
 
 def have_same_file_contents(src: Path, dest: Path) -> bool:
     with open(src, "r", encoding="utf-8") as s_f, open(dest, "r", encoding="utf-8") as d_f:
@@ -66,3 +67,9 @@ def have_same_directory_contents(src: Path, dest: Path) -> bool:
     except ValueError:
         return False
     return True
+
+def eprint(msg: str, red=False):
+    if red:
+        print(f"\033[91m{msg}\033[0m", file=stderr)
+    else:
+        print(msg, file=stderr)
