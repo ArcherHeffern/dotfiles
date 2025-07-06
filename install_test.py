@@ -64,23 +64,23 @@ class UtilTest(unittest.TestCase):
     
 
     def test_process_pair(self):
-        # TODO: Find unittest fixtures
-        # Setup
         test_dir = Path("./testing")
         if test_dir.exists():
             shutil.rmtree(test_dir)
         test_dir.mkdir()
 
-        src = Path("./install_test_data/sample.conf")
-        dest = test_dir / "sample.conf"
+        try:
+            src = Path("./install_test_data/sample.conf")
+            dest = test_dir / "sample.conf"
 
-        pair = Pair(src, dest)
-        self.assertEqual(process_pair(pair), Status.PASSED)
-        self.assertTrue(install_utils.have_same_file_contents(src, dest))
+            pair = Pair(src, dest)
+            self.assertEqual(process_pair(pair), Status.PASSED)
+            self.assertTrue(install_utils.have_same_file_contents(src, dest))
 
-        # Clean up
-        if test_dir.exists():
-            shutil.rmtree(test_dir)
+        finally:
+            # Clean up
+            if test_dir.exists():
+                shutil.rmtree(test_dir)
 
 
 if __name__ == '__main__':
