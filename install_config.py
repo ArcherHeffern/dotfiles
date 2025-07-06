@@ -74,6 +74,15 @@ settings: list[Setting] = [
         ],
     ),
     Setting(
+        "Intellij Idea Vim Config",
+        [
+            Pair(
+                Path(".ideavimrc"),
+                Path("~/.ideavimrc"),
+            )
+        ]
+    ),
+    Setting(
         "Update Homebrew Cron Job",
         [
             Pair(
