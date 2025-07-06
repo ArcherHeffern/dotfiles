@@ -5,7 +5,7 @@ from stat import S_IFMT
 from shutil import copy, copytree, rmtree
 
 from install_types import Dest, GitRepo, Pair, Setting, Src
-from install_utils import eprint, get_platform, has_unstaged_changes, have_same_directory_contents, have_same_file_contents, prompt_yn
+from install_utils import ANSI_CLEAR_FORMATTING, ANSI_UNDERLINE, eprint, get_platform, git_status, have_same_directory_contents, have_same_file_contents, prompt_yn
 from install_config import settings
 
 
@@ -17,8 +17,12 @@ def can_update(src: Src, dest: Dest):
         return True
 
     if isinstance(src, GitRepo):
-        if has_unstaged_changes(dest):
-            return prompt_yn(f"{dest} has unstaged changes. Overwrite anyways? (y/n) ")
+        status = git_status(dest)
+        if not status:
+            return prompt_yn(f"{dest} has untracked content. Overwrite? (y/n) ")
+        if not status.synced_with_remote():
+            print(status)
+            return prompt_yn(f"{dest} has unstaged changes. Overwrite? (y/n) ")
         return False # TODO: May want to prompt anyways since there may be ignored files we would like to keep
     elif isinstance(src, Path):
         if S_IFMT(src.stat().st_mode) != S_IFMT(dest.stat().st_mode):
@@ -83,7 +87,7 @@ if __name__ == '__main__':
         if setting.platform is not None and get_platform() not in setting.platform:
             print(f"Skipping {setting.name}. Intended for {",".join([p.value for p in setting.platform])}")
             continue
-        print(f"\033[4mRunning {setting.name}\033[0m")
+        print(f"{ANSI_UNDERLINE}Running {setting.name}{ANSI_CLEAR_FORMATTING}")
         run_callback = False
         for pair in setting.src_dest_pairs:
             print(f"{pair.src} -> {pair.dest}")
