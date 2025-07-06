@@ -15,10 +15,10 @@ Callback: TypeAlias = Callable[["Setting"],ErrorMsg]
 Dest: TypeAlias = Path
 
 class Platform(Enum):
-    MACOS = auto()
-    WINDOWS = auto()
-    LINUX = auto()
-    UNKNOWN = auto()
+    MACOS = "MacOS"
+    WINDOWS = "Windows"
+    LINUX = "Linux"
+    UNKNOWN = "Unknown"
 
 @dataclass
 class Pair:
@@ -26,11 +26,16 @@ class Pair:
     dest: Dest
     make_executable: bool = False
 
+    def __post_init__(self):
+        if type(self.src) is Path:
+            self.src = self.src.expanduser()
+        self.dest = self.dest.expanduser()
+
 
 @dataclass
 class Setting:
     name: str
-    src_dest_pairs: Pair | list[Pair]
+    src_dest_pairs: list[Pair]
     callback: Optional[Callback] = None
-    platform: Optional[Platform | Iterable[Platform]] = None
+    platform: Optional[Iterable[Platform]] = None
     final_message: str|None = None
