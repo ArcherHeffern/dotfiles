@@ -1,11 +1,11 @@
 from enum import Enum, auto
-from pathlib import Path, PosixPath
+from pathlib import Path
 from subprocess import run
 from stat import S_IFMT
-from shutil import copy, rmtree
+from shutil import copy, copytree, rmtree
 
 from install_types import Dest, GitRepo, Pair, Setting, Src
-from install_utils import get_platform, has_unstaged_changes, have_same_directory_contents, have_same_file_contents, prompt_yn
+from install_utils import eprint, get_platform, has_unstaged_changes, have_same_directory_contents, have_same_file_contents, prompt_yn
 from install_config import settings
 
 
@@ -16,11 +16,11 @@ def can_update(src: Src, dest: Dest):
     if not dest.exists():
         return True
 
-    if type(src) is GitRepo:
+    if isinstance(src, GitRepo):
         if has_unstaged_changes(dest):
             return prompt_yn(f"{dest} has unstaged changes. Overwrite anyways? (y/n) ")
         return False # TODO: May want to prompt anyways since there may be ignored files we would like to keep
-    elif type(src) is Path or type(src) is PosixPath:
+    elif isinstance(src, Path):
         if S_IFMT(src.stat().st_mode) != S_IFMT(dest.stat().st_mode):
             return prompt_yn(f"{src} and {dest} are not the same File System Object. eg. File vs Directory. Overwrite? (y/n) ")
         elif src.is_file():
@@ -52,17 +52,23 @@ def process_pair(pair: Pair) -> Status:
         elif pair.dest.exists():
             raise NotImplementedError(f"Unhandled file type at {pair.dest}")
             
-        if type(pair.src) is GitRepo:
-            run(["git", "clone", pair.src, pair.dest])
-        elif type(pair.src) in [Path, PosixPath]:
-            copy(pair.src, pair.dest)
+        if isinstance(pair.src, GitRepo):
+            completed_process = run(["git", "clone", pair.src, pair.dest])
+            print(completed_process.returncode)
+        elif isinstance(pair.src, Path):
+            if pair.src.is_file():
+                copy(pair.src, pair.dest)
+            elif pair.src.is_dir():
+                copytree(pair.src, pair.dest)
+            else:
+                raise NotImplementedError(f"Unhandled file type at {pair.src}")
         else:
             raise NotImplementedError(f"Unreachable: {type(pair.src)}")
             
         if pair.make_executable and pair.dest.is_file():
             pair.dest.chmod(755)
     except Exception as e:
-        print(e)
+        eprint(f"Error processing pair: {e}", red=True)
         return Status.FAILED
     return Status.PASSED
     
@@ -77,9 +83,10 @@ if __name__ == '__main__':
         if setting.platform is not None and get_platform() not in setting.platform:
             print(f"Skipping {setting.name}. Intended for {",".join([p.value for p in setting.platform])}")
             continue
-        print(f"Running {setting.name}")
+        print(f"\033[4mRunning {setting.name}\033[0m")
         run_callback = False
         for pair in setting.src_dest_pairs:
+            print(f"{pair.src} -> {pair.dest}")
             match process_pair(pair):
                 case Status.PASSED:
                     passed.append(setting)
@@ -89,9 +96,10 @@ if __name__ == '__main__':
                 case Status.FAILED:
                     failed.append(setting)
         if run_callback and setting.callback:
+            print("Running callback.")
             error_msg = setting.callback(setting)
             if error_msg:
-                print(error_msg)
+                eprint(error_msg, red=True)
                 continue
     for each_passed in passed:
         if each_passed.final_message:

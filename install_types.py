@@ -7,10 +7,10 @@ from typing import Callable, Iterable, Optional, TypeAlias, NewType
 
 ErrorMsg: TypeAlias = str|None
 
-GitRepo = NewType("GitRepo", str)
+class GitRepo(str):
+    ...
 
-SrcType: TypeAlias = Path | GitRepo
-Src: TypeAlias = SrcType
+Src: TypeAlias = Path | GitRepo
 Callback: TypeAlias = Callable[["Setting"],ErrorMsg]
 Dest: TypeAlias = Path
 
