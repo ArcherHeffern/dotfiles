@@ -17,6 +17,8 @@ from install_utils import (
 )
 from install_config import settings
 
+# TODO: User should be able to update this repo with changes to dest files
+# TODO: User should see src - dest differences before making a decision
 
 def can_update(src: Src, dest: Dest):
     """
@@ -85,6 +87,7 @@ def process_pair(pair: Pair) -> Status:
             if completed_process.returncode != 0:
                 raise Exception(f"Failed to clone {pair.src}")
         elif isinstance(pair.src, Path):
+            pair.dest.parent.mkdir(parents=True, exist_ok=True)
             if pair.src.is_file():
                 copy(pair.src, pair.dest)
             elif pair.src.is_dir():

@@ -16,6 +16,7 @@ alias grin='grep -rin'
 alias 8='ping 8.8.8.8'
 alias swagger='npx open-swagger-ui --open'
 alias du-pretty='du -s --si'
+alias r='remote.sh'
 
 eval "$(zoxide init bash)"
 
@@ -31,7 +32,6 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 	export PATH="/usr/libexec/:$PATH"
 	export PATH="$HOME/.ghcup/bin/:$PATH"
-	export PATH="$HOME/Desktop/code/brandeis_purity_test/scripts:$PATH"
 	export PATH="$HOME/.local/bin:$PATH"
 	export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 	export PATH="/opt/homebrew/opt/llvm@17/bin:$PATH"
