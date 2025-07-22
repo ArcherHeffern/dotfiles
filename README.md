@@ -1,10 +1,14 @@
-Run `./install.sh` to install
-
-# Install dependencies
+# Usage
+1. Insall Homebrew
+2. Install dependencies `./install-packages`
+3. Install `python3.13 ./install.py`
+4. Install zoxide
 [zoxide](https://github.com/ajeetdsouza/zoxide)
 ```bash
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 ```
+
+5. Install Vundle
 
 [Vundle](https://github.com/VundleVim/Vundle.vim)
 ```bash

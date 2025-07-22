@@ -4,6 +4,10 @@
 - `xcode-select --install`
 - clone and install dotfiles 
 - Remove cmd-shift-f shortcut to open finder using system settings
+- Turn keyrepeating up
+- Chrome turn 'Warn Before Quitting' on
+- Turn key repeat rate to the max and delay before repeating keys to the min
+- Notes app turn off autocorrect
 
 # Applications
 - Chrome
