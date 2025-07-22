@@ -46,14 +46,22 @@ settings: list[Setting] = [
         final_message="Launch vim and run :PluginInstall",
     ),
     Setting(
-        "bash",
+        "zsh and bash",
         [
+            Pair(
+                Path(".archer_profile"),
+                Path("~/.archer_profile"),
+            ),
+            Pair(
+                Path(".zprofile"),
+                Path("~/.zprofile"),
+            ),
             Pair(
                 Path(".bash_profile"),
                 Path("~/.bash_profile"),
-            )
+            ),
         ],
-        final_message="Source the new bash_profile using `source ~/.bash_profile` or restart your terminal.",
+        final_message="restart your terminal to run .profile files.",
     ),
     Setting(
         "tmux",

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CROSS_PLATFORM_PACKAGES=('sl' 'bat' 'tree' 'jq' 'fzf' 'cloc' 'ffmpeg' 'imagemagick' 'yt-dlp' 'neofetch')
+CROSS_PLATFORM_PACKAGES=('sl' 'bat' 'tree' 'jq' 'fzf' 'cloc' 'ffmpeg' 'imagemagick' 'yt-dlp' 'neofetch' 'zoxide')
 MACOS_PACKAGES=('fd' 'grep' 'openjdk')
 LINUX_PACKAGES=('fd-find' 'net-tools' 'zip' 'zoxide' 'default-jre' 'default-jdk' 'presenterm')
 
@@ -10,7 +10,6 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	# TODO: Check if brew is installed and install if not
 	brew install "${CROSS_PLATFORM_PACKAGES[@]}"
 	brew install "${MACOS_PACKAGES[@]}"
-	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh > /dev/null
 else
 	sudo apt-get update -y && sudo apt-get upgrade -y
 	sudo apt install "${CROSS_PLATFORM_PACKAGES[@]}" -y
