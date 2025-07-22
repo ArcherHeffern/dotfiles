@@ -1,13 +1,16 @@
 # Settings
 - Invert scrolling
-- Remap cap_locks to right_control using Karabiner Elements
+- Turn on tap to click
+- Remap cap_locks to right_control using Karabiner Elements if gaming, or in system settings for work use
 - `xcode-select --install`
 - clone and install dotfiles 
-- Remove cmd-shift-f shortcut to open finder using system settings
 - Turn keyrepeating up
 - Chrome turn 'Warn Before Quitting' on
 - Turn key repeat rate to the max and delay before repeating keys to the min
 - Notes app turn off autocorrect
+- Remove random apps on taskbar
+- Disable desktop
+- Remove cmd-shift-f shortcut to open finder using system settings
 
 # Applications
 - Chrome
