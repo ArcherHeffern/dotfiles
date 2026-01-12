@@ -39,3 +39,9 @@
 - BlockBench
 - Licecap
 - KeyCastr
+
+# VSCode Settings
+- Extensions: Vim, better comments
+- Go to definition : Ctrl-i
+- Go back : Ctrl-o
+- Show or Focus Hover (editor.action.showHover) : Shift-K
