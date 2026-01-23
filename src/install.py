@@ -119,17 +119,19 @@ def install():
             )
             continue
         print(f"{ANSI_UNDERLINE}Running {setting.name}{ANSI_CLEAR_FORMATTING}")
-        run_callback = len(setting.src_dest_pairs) == 0
+        run_callback = True
         for pair in setting.src_dest_pairs:
             print(f"{pair.src} -> {pair.dest}")
             match process_pair(pair):
                 case Status.PASSED:
                     passed.append(setting)
-                    run_callback = True
                 case Status.SKIPPED:
                     skipped.append(setting)
+                    if pair.skip_callback_if_no_change:
+                        run_callback = False
                 case Status.FAILED:
                     failed.append(setting)
+                    run_callback = False
         if run_callback and setting.callback:
             print("Running callback.")
             error_msg = setting.callback(setting)

@@ -32,6 +32,7 @@ class Movable(ABC):
 @dataclass
 class MoveFile(Movable):
     make_executable: bool = False
+    skip_callback_if_no_change: bool = True
 
     def __post_init__(self):
         if type(self.src) is Path:

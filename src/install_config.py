@@ -34,7 +34,7 @@ def create_bunnylol_daemon(_: Setting) -> ErrorMsg:
     copy("./bunnylol.rs/target/release/bunnylol", dest)
 
     bunnylol_job_path = Path("~/Library/LaunchAgents/archer.bunnylol.daemon.plist")
-    run_launch_agent(bunnylol_job_path)
+    return run_launch_agent(bunnylol_job_path)
 
 
 def start_update_homebrew_cron_job(_: Setting) -> ErrorMsg:
@@ -46,7 +46,7 @@ def run_launch_agent(p: Path) -> ErrorMsg:
     p = p.expanduser()
 
     # Validate Config
-    if run(["plutil", "-lint"]).returncode != 0:
+    if run(["plutil", "-lint", p]).returncode != 0:
         return f"{p} is an invalid config"
 
     # Turn agent off if it's on
@@ -165,6 +165,7 @@ settings: list[Setting] = [
             MoveFile(
                 Path("scripts/archer.bunnylol.daemon.plist"),
                 Path("~/Library/LaunchAgents/archer.bunnylol.daemon.plist"),
+                skip_callback_if_no_change=False,
             ),
         ],
         create_bunnylol_daemon,

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-use clap::{CommandFactory, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 
 // BunnylolConfig is needed by both server and CLI
 use bunnylol::BunnylolConfig;
