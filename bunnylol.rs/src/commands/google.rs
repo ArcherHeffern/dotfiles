@@ -10,7 +10,7 @@ impl BunnylolCommand for GoogleSearchCommand {
 
     fn process_args(args: &str) -> String {
         let query = Self::get_command_args(args);
-        build_search_url("https://google.com/search", "q", query)
+        build_search_url("https://kagi.com/search", "q", query)
     }
 
     fn get_info() -> BunnylolCommandInfo {
@@ -31,7 +31,7 @@ mod tests {
     fn test_google_search_command_simple() {
         assert_eq!(
             GoogleSearchCommand::process_args("hello"),
-            "https://google.com/search?q=hello"
+            "https://kagi.com/search?q=hello"
         );
     }
 
@@ -39,7 +39,7 @@ mod tests {
     fn test_google_search_command_with_spaces() {
         assert_eq!(
             GoogleSearchCommand::process_args("hello world"),
-            "https://google.com/search?q=hello%20world"
+            "https://kagi.com/search?q=hello%20world"
         );
     }
 
@@ -47,7 +47,7 @@ mod tests {
     fn test_google_search_command_with_g_prefix() {
         assert_eq!(
             GoogleSearchCommand::process_args("g hello world"),
-            "https://google.com/search?q=hello%20world"
+            "https://kagi.com/search?q=hello%20world"
         );
     }
 
@@ -55,7 +55,7 @@ mod tests {
     fn test_google_search_command_g_only() {
         assert_eq!(
             GoogleSearchCommand::process_args("g"),
-            "https://google.com/search?q="
+            "https://kagi.com/search?q="
         );
     }
 }

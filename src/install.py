@@ -119,7 +119,7 @@ def install():
             )
             continue
         print(f"{ANSI_UNDERLINE}Running {setting.name}{ANSI_CLEAR_FORMATTING}")
-        run_callback = False
+        run_callback = len(setting.src_dest_pairs) == 0
         for pair in setting.src_dest_pairs:
             print(f"{pair.src} -> {pair.dest}")
             match process_pair(pair):

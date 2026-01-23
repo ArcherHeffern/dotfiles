@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from re import search, Match
 from pathlib import Path
 from platform import system
+import shutil
 from subprocess import run
 from sys import stderr
 from typing import Optional, TextIO
@@ -9,6 +10,10 @@ from src.install_types import Platform
 
 ANSI_UNDERLINE = "\033[4m"
 ANSI_CLEAR_FORMATTING = "\033[0m"
+
+
+def exists_on_path(p: str | Path) -> bool:
+    return bool(shutil.which(p))
 
 
 def prompt_yn(msg: str) -> bool:
