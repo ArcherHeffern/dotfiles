@@ -374,7 +374,7 @@ log_level = "{}"
         match self.default_search.as_str() {
             "ddg" | "duckduckgo" => format!("https://duckduckgo.com/?q={}", encoded_query),
             "bing" => format!("https://www.bing.com/search?q={}", encoded_query),
-            _ => format!("https://www.google.com/search?q={}", encoded_query), // Default to Google
+            _ => format!("https://kagi.com/search?q={}", encoded_query), // Default to Kagi
         }
     }
 }
