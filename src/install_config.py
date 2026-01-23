@@ -1,7 +1,14 @@
+from os import mkdir
 from pathlib import Path
 from subprocess import run
-from install_types import ErrorMsg, GitRepo, Pair, Setting, Platform
-from install_utils import get_effective_user_id
+from src.install_types import ErrorMsg, GitRepo, MoveFile, Setting, Platform
+from src.install_utils import get_effective_user_id
+
+
+def start_bunnylol_daemon(_: Setting) -> ErrorMsg:
+    # Compile bunnylol
+    # Copy bunnylol to destination
+    ...
 
 
 def start_update_homebrew_cron_job(_: Setting) -> ErrorMsg:
@@ -36,28 +43,40 @@ def start_update_homebrew_cron_job(_: Setting) -> ErrorMsg:
         return "Failed to bootstrap."
 
 
+def create_user_local_bin(_: Setting):
+    f = Path("~/usr/local/bin/").expanduser()
+    if f.exists():
+        return
+    mkdir(f)
+
+
 settings: list[Setting] = [
+    Setting(
+        "Create usr/local/bin",
+        [],
+        create_user_local_bin,
+    ),
     Setting(
         "vimrc",
         [
-            Pair(Path(".vimrc"), Path("~/.vimrc")),
-            Pair(Path("colors"), Path("~/.vim/colors/")),
+            MoveFile(Path("configs/.vimrc"), Path("~/.vimrc")),
+            MoveFile(Path("colors"), Path("~/.vim/colors/")),
         ],
         final_message="Launch vim and run :PluginInstall",
     ),
     Setting(
         "zsh and bash",
         [
-            Pair(
-                Path(".archer_profile"),
+            MoveFile(
+                Path("configs/.archer_profile"),
                 Path("~/.archer_profile"),
             ),
-            Pair(
-                Path(".zprofile"),
+            MoveFile(
+                Path("configs/.zprofile"),
                 Path("~/.zprofile"),
             ),
-            Pair(
-                Path(".bash_profile"),
+            MoveFile(
+                Path("configs/.bash_profile"),
                 Path("~/.bash_profile"),
             ),
         ],
@@ -66,8 +85,8 @@ settings: list[Setting] = [
     Setting(
         "tmux",
         [
-            Pair(
-                Path(".tmux.conf"),
+            MoveFile(
+                Path("configs/.tmux.conf"),
                 Path("~/.tmux.conf"),
             )
         ],
@@ -75,7 +94,7 @@ settings: list[Setting] = [
     Setting(
         "AScripts",
         [
-            Pair(
+            MoveFile(
                 GitRepo("https://github.com/archerheffern/AScripts"),
                 Path("~/code/AScripts/"),
             )
@@ -84,26 +103,37 @@ settings: list[Setting] = [
     Setting(
         "Intellij Idea Vim Config",
         [
-            Pair(
-                Path(".ideavimrc"),
+            MoveFile(
+                Path("configs/.ideavimrc"),
                 Path("~/.ideavimrc"),
             )
-        ]
+        ],
     ),
     Setting(
         "Update Homebrew Cron Job",
         [
-            Pair(
+            MoveFile(
                 Path("scripts/update_homebrew.sh"),
                 Path("~/Scripts/update_homebrew.sh"),
                 True,
             ),
-            Pair(
+            MoveFile(
                 Path("scripts/archer.homebrew.update.plist"),
                 Path("~/Library/LaunchAgents/archer.homebrew.update.plist"),
             ),
         ],
         start_update_homebrew_cron_job,
+        [Platform.MACOS],
+    ),
+    Setting(
+        "Run bunnylol Daemon",
+        [
+            MoveFile(
+                Path("scripts/archer.bunnylol.daemon.plist"),
+                Path("~/Library/LaunchAgents/archer.bunnylol.daemon.plist"),
+            ),
+        ],
+        start_bunnylol_daemon,
         [Platform.MACOS],
     ),
 ]

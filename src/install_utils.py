@@ -5,7 +5,7 @@ from platform import system
 from subprocess import run
 from sys import stderr
 from typing import Optional, TextIO
-from install_types import Platform
+from src.install_types import Platform
 
 ANSI_UNDERLINE = "\033[4m"
 ANSI_CLEAR_FORMATTING = "\033[0m"

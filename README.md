@@ -15,3 +15,10 @@ curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh 
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 ```
 Launch vim and run `:PluginInstall`
+
+# TODO
+- Create bunnylol daemon
+- Implement MoveDir
+- Move install-packages to python script
+- Combine AScripts with this
+- Add version and hash to generated files. If hash matches and version is lesser - We can auto overwrite

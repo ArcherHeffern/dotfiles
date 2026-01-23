@@ -4,8 +4,8 @@ from subprocess import run
 from stat import S_IFMT
 from shutil import copy, copytree, rmtree
 
-from install_types import Dest, GitRepo, Pair, Setting, Src
-from install_utils import (
+from src.install_types import Dest, GitRepo, MoveFile, Setting, Src
+from src.install_utils import (
     ANSI_CLEAR_FORMATTING,
     ANSI_UNDERLINE,
     eprint,
@@ -15,10 +15,11 @@ from install_utils import (
     have_same_file_contents,
     prompt_yn,
 )
-from install_config import settings
+from src.install_config import settings
 
 # TODO: User should be able to update this repo with changes to dest files
 # TODO: User should see src - dest differences before making a decision
+
 
 def can_update(src: Src, dest: Dest):
     """
@@ -38,7 +39,7 @@ def can_update(src: Src, dest: Dest):
             return prompt_yn(
                 f"{dest} is different from remote. Overwrite? (y/n) "
             ) and (status.unpushed_commits <= 0 or prompt_yn("Confirm: "))
-        return False  
+        return False
     elif isinstance(src, Path):
         if S_IFMT(src.stat().st_mode) != S_IFMT(dest.stat().st_mode):
             return prompt_yn(
@@ -70,7 +71,7 @@ class Status(Enum):
     FAILED = auto()
 
 
-def process_pair(pair: Pair) -> Status:
+def process_pair(pair: MoveFile) -> Status:
     try:
         if not can_update(pair.src, pair.dest):
             return Status.SKIPPED
@@ -107,7 +108,7 @@ def process_pair(pair: Pair) -> Status:
     ...
 
 
-if __name__ == "__main__":
+def install():
     passed: list[Setting] = []
     skipped: list[Setting] = []
     failed: list[Setting] = []

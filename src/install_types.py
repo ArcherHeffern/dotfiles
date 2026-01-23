@@ -1,18 +1,20 @@
-
+from abc import ABC
 from dataclasses import dataclass
 from enum import Enum, auto
 from pathlib import Path
 from typing import Callable, Iterable, Optional, TypeAlias, NewType
 
 
-ErrorMsg: TypeAlias = str|None
+ErrorMsg: TypeAlias = str | None
 
-class GitRepo(str):
-    ...
+
+class GitRepo(str): ...
+
 
 Src: TypeAlias = Path | GitRepo
-Callback: TypeAlias = Callable[["Setting"],ErrorMsg]
+Callback: TypeAlias = Callable[["Setting"], ErrorMsg]
 Dest: TypeAlias = Path
+
 
 class Platform(Enum):
     MACOS = "MacOS"
@@ -20,10 +22,15 @@ class Platform(Enum):
     LINUX = "Linux"
     UNKNOWN = "Unknown"
 
+
 @dataclass
-class Pair:
+class Movable(ABC):
     src: Src
     dest: Dest
+
+
+@dataclass
+class MoveFile(Movable):
     make_executable: bool = False
 
     def __post_init__(self):
@@ -32,10 +39,22 @@ class Pair:
         self.dest = self.dest.expanduser()
 
 
+class DirMoveSetting(Enum):
+    GIVE_UP_IF_EXISTS = auto()
+    TRY_COMBINE = auto()
+    FORCE_COMBINE__DANGEROUS = auto()
+    REPLACE__DANGEROUS = auto()
+
+
+@dataclass
+class MoveDir(Movable):
+    interpolate: DirMoveSetting = DirMoveSetting.TRY_COMBINE
+
+
 @dataclass
 class Setting:
     name: str
-    src_dest_pairs: list[Pair]
+    src_dest_pairs: list[MoveFile]
     callback: Optional[Callback] = None
     platform: Optional[Iterable[Platform]] = None
-    final_message: str|None = None
+    final_message: str | None = None
