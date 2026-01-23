@@ -1,0 +1,13 @@
+[alias]
+# Build release binaries
+server = "build --release --no-default-features --features server"
+cli = "build --release --no-default-features --features cli"
+
+# Development shortcuts
+dev-server = "run --no-default-features --features server -- serve"
+dev-cli = "run --no-default-features --features cli --"
+
+# Install locally (after cloning repo)
+install-cli = "install --path . --features cli --no-default-features"
+install-server = "install --path . --features server --no-default-features"
+install-both = "install --path ."
