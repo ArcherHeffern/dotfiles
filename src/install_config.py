@@ -3,13 +3,18 @@ from pathlib import Path
 from shutil import copy
 from subprocess import run
 from src.install_types import ErrorMsg, GitRepo, MoveFile, Setting, Platform
-from src.install_utils import get_effective_user_id, exists_on_path
+from src.install_utils import get_effective_user_id, exists_on_path, prompt_yn
 
 
 def create_bunnylol_daemon(_: Setting) -> ErrorMsg:
+    dest = Path("/usr/local/bin/bunnylol")
     # Is rustc downloaded
     if not exists_on_path("cargo"):
         return "Count not find cargo in PATH"
+
+    if dest.is_file():
+        if not prompt_yn("Recompile bunnylol? "):
+            return
 
     # Compile bunnylol
     run(
@@ -26,7 +31,6 @@ def create_bunnylol_daemon(_: Setting) -> ErrorMsg:
     )
 
     # Copy bunnylol to destination
-    dest = Path("/usr/local/bin/bunnylol")
     if dest.is_file():
         dest.unlink()
     elif dest.exists():
@@ -133,6 +137,10 @@ settings: list[Setting] = [
                 Path("~/code/AScripts/"),
             )
         ],
+    ),
+    Setting(
+        "Chrome new tab dashboard",
+        [MoveFile(Path("configs/.chrome-home.html"), Path("~/.chrome-home.html"))],
     ),
     Setting(
         "Intellij Idea Vim Config",

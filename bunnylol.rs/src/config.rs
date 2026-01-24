@@ -148,7 +148,7 @@ impl ServerConfig {
 }
 
 fn default_search_engine() -> String {
-    "google".to_string()
+    "kagi".to_string()
 }
 
 fn default_history_enabled() -> bool {

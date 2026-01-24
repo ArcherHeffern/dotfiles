@@ -16,6 +16,11 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 ```
 Launch vim and run `:PluginInstall`
 
+6. Set custom new tab page
+- Download 'New Tab Redirect' extension
+- Turn on 'Allow access to file URLs' permission
+- Set path to 'file://~./chrome-home.html' (But expand it)
+
 # TODO
 - Create bunnylol daemon
 - Implement MoveDir
