@@ -23,6 +23,22 @@ const train_times_container = document.getElementById("train_times_container");
 
 function createTrainTimeElement(train, logo_color_hex, street, status) {
     const container = document.createElement("div")
+    /*
+    <div id="train-times-container"
+        style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around; width: 200px; border: 1px solid black; padding: 5px; align-items: center">
+        <div class="left-group"
+            style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center">
+            <div class="circle"
+                style="border-radius: 50%; display: grid; place-items: center; ;background-color: red; font-weight: 700; width: 28px; height: 28px; margin-right: 10px;">
+                1
+            </div>
+            <div>96th</div>
+        </div>
+        <div>
+            Leave now
+        </div>
+    </div>
+    */
 
 }
 
