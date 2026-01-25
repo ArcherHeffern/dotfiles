@@ -161,10 +161,6 @@ settings: list[Setting] = [
         ],
     ),
     Setting(
-        "Chrome new tab dashboard",
-        [MoveFile(Path("configs/.chrome-home.html"), Path("~/.chrome-home.html"))],
-    ),
-    Setting(
         "Intellij Idea Vim Config",
         [
             MoveFile(

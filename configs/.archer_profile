@@ -5,8 +5,8 @@ alias ls='ls -F'
 alias la='ls -la'
 alias haskell-language-server='haskell-language-server-9.10'
 alias batcat='bat'
-alias python='python3.12'
-alias pip='pip3.12'
+alias python='python3.14'
+alias pip='pip3.14'
 alias gl='git log --all --decorate --oneline --graph'
 alias indent='gindent -kr -i4'
 alias mv='mv -n'
@@ -53,6 +53,6 @@ fi
 
 PS1='\w \$ '
 
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  exec tmux
-fi
+# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#   exec tmux
+# fi
