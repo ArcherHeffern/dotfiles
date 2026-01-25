@@ -2,43 +2,53 @@ from os import mkdir
 from pathlib import Path
 from shutil import copy
 from subprocess import run
-from src.install_types import ErrorMsg, GitRepo, MoveFile, Setting, Platform
+from src.install_types import (
+    ErrorMsg,
+    GitRepo,
+    MoveFile,
+    Setting,
+    Platform,
+)
 from src.install_utils import get_effective_user_id, exists_on_path, prompt_yn
 
 
 def create_bunnylol_daemon(_: Setting) -> ErrorMsg:
-    dest = Path("/usr/local/bin/bunnylol")
+    src = Path("./bunnylol.rs/target/release/bunnylol")
+    dest = Path("~/bin/bunnylol").expanduser()
     # Is rustc downloaded
     if not exists_on_path("cargo"):
         return "Count not find cargo in PATH"
 
-    if dest.is_file():
-        if not prompt_yn("Recompile bunnylol? "):
-            return
-
-    # Compile bunnylol
-    run(
-        [
-            "cargo",
-            "install",
-            "--path",
-            ".",
-            "--features",
-            "server",
-            "--no-default-features",
-        ],
-        cwd="./bunnylol.rs",
-    )
+    if src.is_file():
+        if prompt_yn("Recompile bunnylol? "):
+            # Compile bunnylol
+            run(
+                [
+                    "cargo",
+                    "install",
+                    "--path",
+                    ".",
+                    "--features",
+                    "server",
+                    "--no-default-features",
+                ],
+                cwd="./bunnylol.rs",
+            )
 
     # Copy bunnylol to destination
     if dest.is_file():
         dest.unlink()
     elif dest.exists():
         return f"{dest} exists and isn't a file"
-    copy("./bunnylol.rs/target/release/bunnylol", dest)
+    copy(src, dest)
 
     bunnylol_job_path = Path("~/Library/LaunchAgents/archer.bunnylol.daemon.plist")
     return run_launch_agent(bunnylol_job_path)
+
+
+def create_file_hosting_daemon(_: Setting) -> ErrorMsg:
+    file_hosting_job_path = Path("~/Library/LaunchAgents/archer.filehost.daemon.plist")
+    return run_launch_agent(file_hosting_job_path)
 
 
 def start_update_homebrew_cron_job(_: Setting) -> ErrorMsg:
@@ -81,18 +91,30 @@ def run_launch_agent(p: Path) -> ErrorMsg:
         return "Failed to bootstrap."
 
 
-def create_user_local_bin(_: Setting):
-    f = Path("/usr/local/bin/").expanduser()
+def create_var_www_dir(_: Setting):
+    f = Path("~/www/").expanduser()
     if f.exists():
         return
-    mkdir(f, mode=777)
+    mkdir(f, mode=0o777)
+
+
+def create_users_bin_dir(_: Setting):
+    f = Path("~/bin/").expanduser()
+    if f.exists():
+        return
+    mkdir(f, mode=0o777)
 
 
 settings: list[Setting] = [
     Setting(
-        "Create /usr/local/bin",
+        "Create ~/bin/ directory",
         [],
-        create_user_local_bin,
+        create_users_bin_dir,
+    ),
+    Setting(
+        "Create /var/www/ directory",
+        [],
+        create_var_www_dir,
     ),
     Setting(
         "vimrc",
@@ -177,6 +199,22 @@ settings: list[Setting] = [
             ),
         ],
         create_bunnylol_daemon,
+        [Platform.MACOS],
+    ),
+    Setting(
+        "Run file hosting daemon",
+        [
+            MoveFile(
+                Path("scripts/archer.filehost.daemon.plist"),
+                Path("~/Library/LaunchAgents/archer.filehost.daemon.plist"),
+                skip_callback_if_no_change=False,
+            ),
+            MoveFile(  # TODO: Change to moveDir. Currently will delete dest and copy again.
+                Path("./www/"),
+                Path("~/www/"),
+            ),
+        ],
+        create_file_hosting_daemon,
         [Platform.MACOS],
     ),
 ]

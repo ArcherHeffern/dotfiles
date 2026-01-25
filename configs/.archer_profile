@@ -19,6 +19,7 @@ alias last-download='ls -t ~/Downloads | head -n1'
 
 export PATH="$HOME/code/AScripts:$PATH"
 export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
 # MACOS ONLY
 if [[ "$(uname -s)" == "Darwin" ]]; then

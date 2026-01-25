@@ -138,6 +138,13 @@
     }
 
     render(data);
+    function getGeolocationPermissions() {
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position.coords.latitude, position.coords.longitude)
+        })
+    }
 </script>
+<button onclick="getGeolocationPermissions()">Request Location</button>
 
 </html>

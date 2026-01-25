@@ -3,7 +3,7 @@
 <plist version="1.0">
     <dict>
 	        <key>Label</key>
-			<string>archer.homebrew.update</string>
+			<string>archer.homebrew.chron</string>
 			<key>Program</key>
 			<string>/Users/archerheffern/Scripts/update_homebrew.sh</string>
 			<key>RunAtLoad</key>

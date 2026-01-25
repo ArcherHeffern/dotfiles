@@ -2,7 +2,7 @@ from io import StringIO
 from pathlib import Path
 import shutil
 import unittest
-from src.install import process_pair, Status
+from src.install import process_move_file, Status
 from src.install_types import MoveFile
 import src.install_utils as install_utils
 
@@ -86,7 +86,7 @@ class UtilTest(unittest.TestCase):
             dest = test_dir / "sample.conf"
 
             pair = MoveFile(src, dest)
-            self.assertEqual(process_pair(pair), Status.PASSED)
+            self.assertEqual(process_move_file(pair), Status.PASSED)
             self.assertTrue(install_utils.have_same_file_contents(src, dest))
 
         finally:

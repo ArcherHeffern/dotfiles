@@ -55,7 +55,7 @@ class MoveDir(Movable):
 @dataclass
 class Setting:
     name: str
-    src_dest_pairs: list[MoveFile]
+    src_dest_pairs: list[MoveFile|MoveDir]
     callback: Optional[Callback] = None
     platform: Optional[Iterable[Platform]] = None
     final_message: str | None = None

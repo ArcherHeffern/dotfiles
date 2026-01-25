@@ -4,7 +4,7 @@ from subprocess import run
 from stat import S_IFMT
 from shutil import copy, copytree, rmtree
 
-from src.install_types import Dest, GitRepo, MoveFile, Setting, Src
+from src.install_types import Dest, GitRepo, MoveDir, MoveFile, Setting, Src
 from src.install_utils import (
     ANSI_CLEAR_FORMATTING,
     ANSI_UNDERLINE,
@@ -71,7 +71,7 @@ class Status(Enum):
     FAILED = auto()
 
 
-def process_pair(pair: MoveFile) -> Status:
+def process_move_file(pair: MoveFile) -> Status:
     try:
         if not can_update(pair.src, pair.dest):
             return Status.SKIPPED
@@ -122,16 +122,20 @@ def install():
         run_callback = True
         for pair in setting.src_dest_pairs:
             print(f"{pair.src} -> {pair.dest}")
-            match process_pair(pair):
-                case Status.PASSED:
-                    passed.append(setting)
-                case Status.SKIPPED:
-                    skipped.append(setting)
-                    if pair.skip_callback_if_no_change:
-                        run_callback = False
-                case Status.FAILED:
-                    failed.append(setting)
-                    run_callback = False
+            match pair: 
+                case MoveFile():
+                    match process_move_file(pair):
+                        case Status.PASSED:
+                            passed.append(setting)
+                        case Status.SKIPPED:
+                            skipped.append(setting)
+                            if pair.skip_callback_if_no_change:
+                                run_callback = False
+                        case Status.FAILED:
+                            failed.append(setting)
+                            run_callback = False
+                case MoveDir():
+                    raise NotImplementedError("MoveDir Not implemented")
         if run_callback and setting.callback:
             print("Running callback.")
             error_msg = setting.callback(setting)

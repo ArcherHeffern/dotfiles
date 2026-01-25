@@ -22,8 +22,12 @@ Launch vim and run `:PluginInstall`
 - Set path to 'file://~./chrome-home.html' (But expand it)
 
 # TODO
-- Create bunnylol daemon
 - Implement MoveDir
 - Move install-packages to python script
 - Combine AScripts with this
 - Add version and hash to generated files. If hash matches and version is lesser - We can auto overwrite
+- Split process_move_file into multiple functions
+- create_var_www_dir is getting permissions errors. Can fix with either: 
+    - Ability to run sudo programs occasionally but also know main users home directory.
+        - Can create a main account detection system (Find all users then ask which is main user. Then cache this to be at top of list for all subsequent runs)
+    - Create templating system for my plists to use non sudo file system.
