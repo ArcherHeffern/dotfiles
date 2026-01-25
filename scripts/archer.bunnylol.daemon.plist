@@ -8,8 +8,7 @@
     <array>
         <string>/bin/zsh</string>
         <string>-lc</string>
-        <string>bunnylol</string>
-        <string>serve</string>
+        <string>bunnylol serve</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
